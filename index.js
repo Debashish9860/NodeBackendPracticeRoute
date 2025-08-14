@@ -13,6 +13,7 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB Database"))
   .catch((error) => console.error("❌ MongoDB connection error:", error));
 
+//Cron job for showing minutes and to delete the user older than 7 days
 cron.schedule("* * * * *", async () => {
   message_cron = `Cron Job ran @ : ${new Date().toLocaleTimeString()}`;
   console.log(message_cron);
@@ -37,6 +38,7 @@ cron.schedule("* * * * *", async () => {
 
 app.use(express.json());
 
+//Cron job route for checking in postman
 app.get("/check-cron", async (req, res) => {
   try {
     res.status(200).json({
@@ -48,6 +50,7 @@ app.get("/check-cron", async (req, res) => {
   }
 });
 
+//To add the user
 app.post("/user", async (req, res) => {
   try {
     const user = new User(req.body);
@@ -66,6 +69,7 @@ app.post("/user", async (req, res) => {
   }
 });
 
+//To get all the users
 app.get("/allUsers", async (req, res) => {
   try {
     const users = await User.find();
@@ -81,6 +85,7 @@ app.get("/allUsers", async (req, res) => {
   }
 });
 
+//Delete the user by name
 app.delete("/delete/:name", async (req, res) => {
   try {
     const { name } = req.params;
@@ -103,6 +108,7 @@ app.delete("/delete/:name", async (req, res) => {
   }
 });
 
+//Update the user name by using email to find
 app.post("/update/:email", async (req, res) => {
   try {
     const { email } = req.params;
@@ -133,6 +139,7 @@ app.post("/update/:email", async (req, res) => {
   }
 });
 
+//Delete all exisiting user data
 app.post("/deleteAllUser", async (req, res) => {
   try {
     await User.deleteMany({});
@@ -148,6 +155,7 @@ app.post("/deleteAllUser", async (req, res) => {
   }
 });
 
+//Get all user greater than give age in url
 app.get("/userGreaterThanAge/:age", async (req, res) => {
   try {
     const { age } = req.params;
@@ -171,6 +179,7 @@ app.get("/userGreaterThanAge/:age", async (req, res) => {
   }
 });
 
+//Get first user or given email
 app.get("/getFirstUser/:email", async (req, res) => {
   try {
     const { email } = req.params;
