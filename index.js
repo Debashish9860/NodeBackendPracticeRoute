@@ -116,6 +116,44 @@ app.post("/update/:email", async (req, res) => {
   }
 });
 
+app.post("/deleteAllUser", async (req, res) => {
+  try {
+    await User.deleteMany({});
+    res.status(200).json({
+      success: true,
+      message: "All user deleted successfully....!!!",
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+app.get("/userGreaterThanAge/:age", async (req, res) => {
+  try {
+    const { age } = req.params;
+    const users = await User.find({ age: { $gt: age } });
+    if (!users) {
+      res.status(404).json({
+        success: false,
+        message: `No user found of age greater than ${age}`,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Users Found....!!!",
+      users,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is runnning at PORT ${PORT}`);
 });
