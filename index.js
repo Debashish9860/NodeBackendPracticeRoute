@@ -154,6 +154,31 @@ app.get("/userGreaterThanAge/:age", async (req, res) => {
   }
 });
 
+app.get("/getFirstUser/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "No user found ....!!!!",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "First Users Found....!!!",
+      user,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is runnning at PORT ${PORT}`);
 });
