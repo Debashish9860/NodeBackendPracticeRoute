@@ -13,9 +13,25 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB Database"))
   .catch((error) => console.error("❌ MongoDB connection error:", error));
 
-cron.schedule("* * * * *", () => {
+cron.schedule("* * * * *", async() => {
   message_cron = `Cron Job ran @ : ${new Date().toLocaleTimeString()}`;
   console.log(message_cron);
+
+  const cutOffDate = new Date();
+  cutOffDate.setDate(cutOffDate.getDate() - 7);
+
+  try {
+    const deleted = await User.deleteMany({ createdAt: { $lt: cutOffDate } });
+    if (deleted.deletedCount > 0) {
+      console.log(
+        `🗑 Deleted ${
+          deleted.deletedCount
+        } old users at ${new Date().toLocaleTimeString()}`
+      );F
+    }
+  } catch (error) {
+    console.log("Error deleting old users:", error);
+  }
 });
 
 app.use(express.json());
