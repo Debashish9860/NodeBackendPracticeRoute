@@ -13,7 +13,7 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB Database"))
   .catch((error) => console.error("❌ MongoDB connection error:", error));
 
-cron.schedule("* * * * *", async() => {
+cron.schedule("* * * * *", async () => {
   message_cron = `Cron Job ran @ : ${new Date().toLocaleTimeString()}`;
   console.log(message_cron);
 
@@ -27,7 +27,8 @@ cron.schedule("* * * * *", async() => {
         `🗑 Deleted ${
           deleted.deletedCount
         } old users at ${new Date().toLocaleTimeString()}`
-      );F
+      );
+      F;
     }
   } catch (error) {
     console.log("Error deleting old users:", error);
