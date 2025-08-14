@@ -278,6 +278,30 @@ app.get("/getUserCount", async (req, res) => {
   }
 });
 
+//Find Users by Partial Name Match (Regex Search)
+app.get("/userByPartialName/:name", async (req, res) => {
+  try {
+    const { name } = req.params;
+    const user = await User.find({ name: { $regex: name, $options: "i" } });
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "No user found ....!!!!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Found users",
+      user,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is runnning at PORT ${PORT}`);
 });
