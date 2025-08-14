@@ -23,7 +23,7 @@ app.get("/check-cron", async (req, res) => {
   try {
     res.status(200).json({
       success: true,
-      message: message_cron
+      message: message_cron,
     });
   } catch (error) {
     console.log("Some error in cron job arises.....!", error.message);
