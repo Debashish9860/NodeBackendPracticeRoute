@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import User from "./model/User.js";
+import Post from "./model/Post.js";
 import cron from "node-cron";
 
 const app = express();
@@ -29,7 +30,6 @@ cron.schedule("* * * * *", async () => {
           deleted.deletedCount
         } old users at ${new Date().toLocaleTimeString()}`
       );
-      F;
     }
   } catch (error) {
     console.log("Error deleting old users:", error);
@@ -296,6 +296,31 @@ app.get("/userByPartialName/:name", async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+//Saving Post posted by the User
+app.post("/post", async (req, res) => {
+  try {
+    const { user } = req.body;
+    const exisitingUser = await User.findById(user);
+    if (!exisitingUser) {
+      res.status(404).json({
+        success: false,
+        message: "No user found ....!!!!",
+      });
+    }
+    const post = new Post(req.body);
+    await post.save();
+    res.status(200).json({
+      success: true,
+      message: "Post saved successfully....!!",
+    });
+  } catch (error) {
+    return res.status(404).json({
       success: false,
       message: error.message,
     });
